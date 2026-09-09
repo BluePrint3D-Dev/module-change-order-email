@@ -1,0 +1,44 @@
+<?php
+/** @var $block \Magento\Backend\Block\Template */
+$orderId = (int)$block->getRequest()->getParam('order_id');
+
+$saveUrl = $block->getUrl('blueprint3d_changeorderemail/order/saveEmail', ['order_id' => $orderId]);
+$confirmUrl = $block->getUrl('blueprint3d_changeorderemail/order/confirmMove', ['order_id' => $orderId]);
+?>
+<div id="change-order-email-modal" style="display:none;">
+    <form id="change-order-email-form">
+        <div class="admin__field">
+            <label class="admin__field-label" for="change_order_email_new">
+                <span><?= $escaper->escapeHtml(__('New email')) ?></span>
+            </label>
+            <div class="admin__field-control">
+                <input class="admin__control-text" type="email" name="new_email" id="change_order_email_new" required>
+            </div>
+        </div>
+
+        <div class="admin__field">
+            <label class="admin__field-label" for="change_order_email_confirm">
+                <span><?= $escaper->escapeHtml(__('Confirm email')) ?></span>
+            </label>
+            <div class="admin__field-control">
+                <input class="admin__control-text" type="email" name="confirm_email"
+                       id="change_order_email_confirm" required>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="confirm-move-order-modal" style="display:none;">
+    <p id="confirm-move-order-text"></p>
+</div>
+
+<script type="text/x-magento-init">
+    {
+      "*": {
+        "BluePrint3D_ChangeOrderEmail/js/order-edit-email": {
+          "saveUrl": "<?= $escaper->escapeUrl($saveUrl) ?>",
+          "confirmUrl": "<?= $escaper->escapeUrl($confirmUrl) ?>"
+        }
+      }
+    }
+</script>

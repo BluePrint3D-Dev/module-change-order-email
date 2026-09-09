@@ -1,0 +1,36 @@
+{
+  "type": "magento2-module",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "BluePrint3D Ltd",
+      "email": "support@blueprint3d.dev",
+      "homepage": "https://blueprint3d.dev"
+    }
+  ],
+  "support": {
+    "email": "support@blueprint3d.dev",
+    "docs": "https://blueprint3d.dev"
+  },
+
+  "--- MODULE SPECIFIC BELOW ---": "-------------------------",
+
+  "name": "blueprint3d/module-change-order-email",
+  "description": "Lets admins change or correct the customer email address on an existing Magento 2 order, with safe handling of matching customer accounts.",
+
+  "require": {
+    "php": ">=8.1.0 <8.6.0",
+    "magento/framework": "*",
+    "magento/module-backend": "*",
+    "magento/module-customer": "*",
+    "magento/module-sales": "*"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "BluePrint3D\\ChangeOrderEmail\\": ""
+    }
+  }
+}
