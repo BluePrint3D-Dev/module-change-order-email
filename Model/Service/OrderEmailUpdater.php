@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace BluePrint3D\ChangeOrderEmail\Model\Service;
 
+use BluePrint3D\ChangeOrderEmail\Model\OrderEmailCascadeGuard;
 use BluePrint3D\ChangeOrderEmail\Model\ResourceModel\OrderGridUpdater;
 use BluePrint3D\ChangeOrderEmail\Model\ResourceModel\OrderStatusGuard;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -33,6 +34,7 @@ class OrderEmailUpdater
      * @param SessionManagerInterface $session
      * @param OrderGridUpdater $orderGridUpdater
      * @param OrderStatusGuard $orderStatusGuard
+     * @param OrderEmailCascadeGuard $cascadeGuard
      */
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
@@ -40,7 +42,8 @@ class OrderEmailUpdater
         private readonly CustomerCollectionFactory $customerCollectionFactory,
         private readonly SessionManagerInterface $session,
         private readonly OrderGridUpdater $orderGridUpdater,
-        private readonly OrderStatusGuard $orderStatusGuard
+        private readonly OrderStatusGuard $orderStatusGuard,
+        private readonly OrderEmailCascadeGuard $cascadeGuard
     ) {
     }
 
@@ -85,7 +88,11 @@ class OrderEmailUpdater
         // If unused, or belongs to same customer -> update customer + order
         if ($targetCustomerId === null || $targetCustomerId === (int)$currentCustomer->getId()) {
             $currentCustomer->setEmail($newEmail);
-            $this->customerRepository->save($currentCustomer);
+            // Change this order only: stop core copying the new email onto
+            // every other order this customer has (see OrderEmailCascadeGuard).
+            $this->cascadeGuard->withoutCascade(function () use ($currentCustomer) {
+                $this->customerRepository->save($currentCustomer);
+            });
 
             $this->applyOrderEmail(
                 $order,

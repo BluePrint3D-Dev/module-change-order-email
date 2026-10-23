@@ -18,4 +18,8 @@
         <plugin name="blueprint3d_change_order_email_add_edit_button"
                 type="BluePrint3D\ChangeOrderEmail\Plugin\AddEditOrderEmailButton"/>
     </type>
+    <type name="Magento\Customer\Observer\UpgradeOrderCustomerEmailObserver">
+        <plugin name="blueprint3d_change_order_email_skip_cascade"
+                type="BluePrint3D\ChangeOrderEmail\Plugin\SkipOrderEmailCascade"/>
+    </type>
 </config>

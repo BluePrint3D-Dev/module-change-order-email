@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2026 BluePrint3D Ltd. All rights reserved.
- * 
+ *
  * This software is provided free of charge for personal or commercial use.
- * Resale, redistribution, or sublicensing of this source code, modified or 
+ * Resale, redistribution, or sublicensing of this source code, modified or
  * unmodified, for direct financial gain is strictly prohibited.
  *
  * @author    BluePrint3D Ltd <support@blueprint3d.dev>
@@ -12,9 +12,24 @@
 define([
   'jquery',
   'Magento_Ui/js/modal/modal',
+  'Magento_Ui/js/modal/alert',
   'mage/translate'
-], function ($, modal, $t) {
+], function ($, modal, uiAlert, $t) {
   'use strict';
+
+  /**
+   * Show an error in the admin's own alert dialog rather than the browser's
+   * native alert(), which freezes the page. The message can echo the email
+   * the admin typed, and the dialog renders HTML, so escape it first.
+   *
+   * @param {String} message
+   */
+  var showError = function (message) {
+    uiAlert({
+      title: $t('Change order email'),
+      content: $('<div>').text(message).html()
+    });
+  };
 
   return function (config) {
     var $editModalEl = $('#change-order-email-modal');
@@ -45,15 +60,17 @@ define([
               return;
             }
 
-            alert((res && res.message) ? res.message : $t('Unable to update email.'));
+            showError((res && res.message) ? res.message : $t('Unable to update email.'));
           }).fail(function () {
-            alert($t('Request failed.'));
+            showError($t('Request failed.'));
           });
         }
       }, {
         text: $t('Cancel'),
         class: 'action-secondary',
-        click: function () { this.closeModal(); }
+        click: function () {
+          this.closeModal();
+        }
       }]
     }, $editModalEl);
 
@@ -68,15 +85,17 @@ define([
               location.reload();
               return;
             }
-            alert((res && res.message) ? res.message : $t('Unable to move order.'));
+            showError((res && res.message) ? res.message : $t('Unable to move order.'));
           }).fail(function () {
-            alert($t('Request failed.'));
+            showError($t('Request failed.'));
           });
         }
       }, {
         text: $t('Unsure — abort'),
         class: 'action-secondary',
-        click: function () { this.closeModal(); }
+        click: function () {
+          this.closeModal();
+        }
       }]
     }, $confirmModalEl);
 
