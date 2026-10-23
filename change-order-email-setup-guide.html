@@ -556,13 +556,13 @@
       <p class="lede">Customers regularly place orders with a mistyped email address, and out of the box Magento gives admins no safe way to fix it. The email on an order is tied to the customer record it was placed under, so a naive edit can silently detach the order from its account or collide with an email already used by someone else.</p>
       <p>This module adds an <b>Edit Order Email</b> button to the admin order view page. Submitting a new address updates the order - and the customer account, if the order belongs to one - safely:</p>
       <ul style="margin:0 0 14px; padding-left:20px; max-width:65ch;">
-        <li>If the new email is unused, or already belongs to the same customer, the order and customer record are updated immediately.</li>
+        <li>If the new email is unused, or already belongs to the same customer, the order and the customer record are updated immediately. Only the order you are editing changes - the customer's other orders keep their existing email.</li>
         <li>If the new email already belongs to a <i>different</i> customer, the admin is asked to confirm before the order is moved to that customer's account.</li>
         <li>Guest orders are updated in place with no customer account changes.</li>
       </ul>
       <div class="callout">
         <span class="callout-mark">Audit trail</span>
-        <p>Every change is recorded as a comment in the order's status history, noting the old and new email, the customer ID involved, and which admin user made the change.</p>
+        <p>Every change is recorded as a comment in the order's status history, noting the old and new email and which admin user made the change. When an order is moved to another customer, the note also records both customer IDs.</p>
       </div>
     </div>
   </section>
